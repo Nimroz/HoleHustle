@@ -69,19 +69,24 @@ public class UiController : MonoBehaviour
         {
             LevelsPanel.SetActive(true);
             HomePanel.SetActive(false);
+            CloseGame.gameObject.SetActive(false);
         }
         if (sender == SettingsBtn.gameObject)
         {
             SettingsPanel.SetActive(true);
             HomePanel.SetActive(false);
+            CloseGame.gameObject.SetActive(false);
         }
         if (sender == ShopBtn.gameObject)
         {
             ShopPanel.SetActive(true);
             HomePanel.SetActive(false);
+            CloseGame.gameObject.SetActive(false);
         }
         if (sender == HomeBtn.gameObject)
         {
+             gameManagerRef.DisableAllLevel();
+            CloseGame.gameObject.SetActive(true);
             if (ShopPanel.activeSelf == true)
             {
                 ShopPanel.SetActive(false);
@@ -104,16 +109,20 @@ public class UiController : MonoBehaviour
         }
         if (sender == HomeBtnOnGO.gameObject)
         {
+            CloseGame.gameObject.SetActive(true);
             if (GameOverPanel.activeSelf == true)
             {
+                gameManagerRef.DisableAllLevel();
                 GameOverPanel.SetActive(false);
                 HomePanel.SetActive(true);
             }
         }
         if (sender == HomeBtnOnWin.gameObject)
         {
+            CloseGame.gameObject.SetActive(true);
             if (WinPanel.activeSelf == true)
             {
+                gameManagerRef.DisableAllLevel();
                 WinPanel.SetActive(false);
                 HomePanel.SetActive(true);
             }

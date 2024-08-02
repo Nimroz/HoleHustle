@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Date: 16-Jul-2024
 /// Author: Nimroz Baloch
-/// Purpose: This Script Controls All the UI Functionality.
+/// Purpose: This Script Controls Win Point Functionality.
 /// </summary>
 public class WinPoint : MonoBehaviour
 {

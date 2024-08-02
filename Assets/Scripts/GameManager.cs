@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
         uiControllerRef.GameOverPanel.SetActive(false);
         LevelDefaults tempLevelObj = levelsParentRef.LevelObjects[levelSelectorRef.currentLevel].GetComponent<LevelDefaults>();
         tempLevelObj.Lives = 2;
-        tempLevelObj.Player.transform.position = tempLevelObj.Spawner.transform.position;
+        tempLevelObj.Player.transform.position = tempLevelObj.Spawner.transform.localPosition;
         tempLevelObj.isGameOver = false;
         LivesReload();
         //Debug.Log("Player Pos" + LevelDefaultsRef.Lives);
@@ -82,7 +82,8 @@ public class GameManager : MonoBehaviour
         uiControllerRef.WinPanel.SetActive(false);
         //Debug.Log("Curr Lvl# " + levelsParentRef.LevelObjects[levelSelectorRef.currentLevel]);
         levelsParentRef.LevelObjects[levelSelectorRef.currentLevel].gameObject.SetActive(false);
-        levelSelectorRef.currentLevel = levelSelectorRef.currentLevel + 1; 
+        levelSelectorRef.currentLevel = levelSelectorRef.currentLevel + 1;
+        levelsParentRef.LevelObjects[levelSelectorRef.currentLevel].GetComponent<LevelDefaults>().ResetBypass();
         levelsParentRef.LevelObjects[levelSelectorRef.currentLevel].gameObject.SetActive(true);
         LivesReload();
         //Debug.Log("Curr Lvl# aftr" + levelsParentRef.LevelObjects[levelSelectorRef.currentLevel]);
@@ -106,7 +107,19 @@ public class GameManager : MonoBehaviour
             if(!uiControllerRef.LivesParent.transform.GetChild(i).gameObject.activeSelf)
             uiControllerRef.LivesParent.transform.GetChild(i).gameObject.SetActive(true);
         }
+
         Debug.Log("LivesReload");
+    }
+
+    public void DisableAllLevel() 
+    {
+        for (int i = 0; i < levelsParentRef.transform.childCount; i++)
+        {
+            if (levelsParentRef.LevelObjects[i].gameObject.activeSelf) 
+            {
+                levelsParentRef.LevelObjects[i].gameObject.SetActive(false);
+            }
+        }
     }
 
     public void CloseGame() 

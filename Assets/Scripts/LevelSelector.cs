@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public class LevelSelector : MonoBehaviour
 {
     #region Variables
-    public LevelsManager LevelsParent;
+    public LevelsManager LevelsManager;
     public GameManager GameManager;
     public List<Button> LevelButtons;
     public int currentLevel = 0;
@@ -21,7 +21,7 @@ public class LevelSelector : MonoBehaviour
     private void Start()
     {
         GameManager = FindObjectOfType<GameManager>();
-        LevelsParent = FindObjectOfType<LevelsManager>(true);
+        LevelsManager = FindObjectOfType<LevelsManager>(true);
         for (int i = 0; i < transform.childCount; i++)
         {
             int levelIndex = i; // Local variable to capture current index
@@ -38,13 +38,14 @@ public class LevelSelector : MonoBehaviour
     #region CustomMethods
     public void StartLevel(int levelNo) 
     {
-        if(LevelsParent.transform.GetChild(levelNo).gameObject != null) 
+        if(LevelsManager.transform.GetChild(levelNo).gameObject != null) 
         {
-            for (int i = 0; i < LevelsParent.transform.childCount; i++)
+            for (int i = 0; i < LevelsManager.transform.childCount; i++)
             {
-            LevelsParent.LevelObjects[i].gameObject.SetActive(false);
+                LevelsManager.LevelObjects[i].gameObject.SetActive(false);
             }
-            LevelsParent.LevelObjects[levelNo].gameObject.SetActive(true);
+            LevelsManager.LevelObjects[levelNo].gameObject.SetActive(true);
+            LevelsManager.LevelObjects[levelNo].GetComponent<LevelDefaults>().ResetBypass();
             Debug.Log("LevelOn");
         }
         GameManager.LivesReload();
