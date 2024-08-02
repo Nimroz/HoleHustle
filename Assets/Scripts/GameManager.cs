@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
     public void OnGameIsOver()
     {
         StartCoroutine(GameOverCoroutine());
+        //LevelDefaultsRef.isGameOver = true;
         Debug.Log("You Lose");
     }
     IEnumerator GameOverCoroutine()
@@ -91,6 +92,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < uiControllerRef.LivesParent.transform.childCount; i++)
         {
+            if(uiControllerRef.LivesParent != null)
             uiControllerRef.LivesParent.transform.GetChild(life).gameObject.SetActive(false);
         }
         Debug.Log("You Miss");

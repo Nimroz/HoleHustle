@@ -73,10 +73,11 @@ public class PlayerMovements : MonoBehaviour
             }
         }
 
-        if (LevelDefaults.Lives < 0 && LevelDefaults.isWin == false && LevelDefaults.isGameOver == true)
+        if (LevelDefaults.Lives < 0 && LevelDefaults.isWin == false/* && LevelDefaults.isGameOver == true*/)
         {
             GameManager.OnGameOver?.Invoke();
             LevelDefaults.Lives = 1;
+            Debug.Log("GameOver");
         }
     }
     #endregion
