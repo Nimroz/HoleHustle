@@ -10,7 +10,7 @@ public class LevelSelector : MonoBehaviour
 {
     #region Variables
     public LevelsManager LevelsManager;
-    public GameManager GameManager;
+    public GameManager gameManager;
     public List<Button> LevelButtons;
     public int currentLevel = 0;
     #endregion
@@ -20,7 +20,7 @@ public class LevelSelector : MonoBehaviour
     #region UnityMethods
     private void Start()
     {
-        GameManager = FindObjectOfType<GameManager>();
+        gameManager = FindObjectOfType<GameManager>();
         LevelsManager = FindObjectOfType<LevelsManager>(true);
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -45,10 +45,15 @@ public class LevelSelector : MonoBehaviour
                 LevelsManager.LevelObjects[i].gameObject.SetActive(false);
             }
             LevelsManager.LevelObjects[levelNo].gameObject.SetActive(true);
+            if (!gameManager.uiControllerRef.levelText.gameObject.activeSelf) 
+            {
+                gameManager.uiControllerRef.levelText.gameObject.SetActive(true);
+            }
+            gameManager.uiControllerRef.levelText.text = "Level :  " + (levelNo + 1).ToString();
             LevelsManager.LevelObjects[levelNo].GetComponent<LevelDefaults>().ResetBypass();
             Debug.Log("LevelOn");
         }
-        GameManager.LivesReload();
+        gameManager.LivesReload();
         currentLevel = levelNo;
         transform.parent.gameObject.SetActive(false);
     }

@@ -13,120 +13,136 @@ public class GameManager : MonoBehaviour
     public LevelSelector levelSelectorRef;
     public LevelsManager levelsParentRef;
     public LevelDefaults LevelDefaultsRef;
-
     #endregion
 
     #region UnityMethods
-
-    private void Awake()
+    private void OnEnable()
     {
-        SceneManager.LoadSceneAsync("UserInterface", LoadSceneMode.Additive);
+        OnMiss += LivesRemoves;
     }
+
+    private void OnDisable()
+    {
+        OnMiss -= LivesRemoves;
+    }
+
     private void Start()
     {
         uiControllerRef = FindObjectOfType<UiController>(true);
         levelsParentRef = FindObjectOfType<LevelsManager>(true);
         levelSelectorRef = FindObjectOfType<LevelSelector>(true);
-        LevelDefaultsRef = FindObjectOfType<LevelDefaults>(true);
+        LevelDefaultsRef = levelsParentRef.transform.GetChild(0).GetComponent<LevelDefaults>();
     }
     #endregion
 
     #region CustomMethods
     public void OnWinning()
     {
+        LevelDefaultsRef.isWin = true;
+        if (uiControllerRef.GameOverPanel.activeSelf)
+        {
+            uiControllerRef.GameOverPanel.SetActive(false);
+        }
         StartCoroutine(OnWinCourotine());
         Debug.Log("You Win");
     }
 
     IEnumerator OnWinCourotine()
     {
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(1f);
         uiControllerRef.WinPanel.SetActive(true);
-        LevelDefaultsRef.isWin = true;
+        Destroy(LevelDefaultsRef.Player);
     }
 
     public void OnGameIsOver()
     {
-        StartCoroutine(GameOverCoroutine());
-        //LevelDefaultsRef.isGameOver = true;
-        Debug.Log("You Lose");
-    }
-    IEnumerator GameOverCoroutine()
-    {
-        yield return new WaitForSeconds(.5f);
-        uiControllerRef.GameOverPanel.SetActive(true);
+        if (!LevelDefaultsRef.isWin)
+        {
+            StartCoroutine(GameOverCoroutine());
+            Debug.Log("You Lose");
+        }
     }
 
-    public void OnLevelReload() 
+    IEnumerator GameOverCoroutine()
     {
-        
+        yield return new WaitForSeconds(1.1f);
+        uiControllerRef.GameOverPanel.SetActive(true);
+        Destroy(LevelDefaultsRef.Player);
+    }
+
+    public void OnLevelReload()
+    {
         for (int i = 0; i < levelsParentRef.transform.childCount; i++)
         {
             levelsParentRef.LevelObjects[i].gameObject.SetActive(false);
-           
         }
         levelsParentRef.LevelObjects[levelSelectorRef.currentLevel].gameObject.SetActive(true);
         uiControllerRef.GameOverPanel.SetActive(false);
         LevelDefaults tempLevelObj = levelsParentRef.LevelObjects[levelSelectorRef.currentLevel].GetComponent<LevelDefaults>();
-        tempLevelObj.Lives = 2;
-        tempLevelObj.Player.transform.position = tempLevelObj.Spawner.transform.localPosition;
-        tempLevelObj.isGameOver = false;
+        tempLevelObj.ResetBypass();
         LivesReload();
-        //Debug.Log("Player Pos" + LevelDefaultsRef.Lives);
-        //LevelDefaultsRef.Player.transform.position = LevelDefaultsRef.Spawner.transform.position;
-        //LevelDefaultsRef.isGameOver = false;
     }
 
-    public void NextLevelBtn() 
+    public void NextLevelBtn()
     {
         uiControllerRef.WinPanel.SetActive(false);
-        //Debug.Log("Curr Lvl# " + levelsParentRef.LevelObjects[levelSelectorRef.currentLevel]);
         levelsParentRef.LevelObjects[levelSelectorRef.currentLevel].gameObject.SetActive(false);
         levelSelectorRef.currentLevel = levelSelectorRef.currentLevel + 1;
-        levelsParentRef.LevelObjects[levelSelectorRef.currentLevel].GetComponent<LevelDefaults>().ResetBypass();
+        if (levelSelectorRef.currentLevel >= 18)
+        {
+            levelSelectorRef.currentLevel = 0;
+        }
+        LevelDefaultsRef = levelsParentRef.LevelObjects[levelSelectorRef.currentLevel].GetComponent<LevelDefaults>();
+        LevelDefaultsRef.ResetBypass();
+        uiControllerRef.levelText.text = "Level: " + (levelSelectorRef.currentLevel + 1).ToString();
         levelsParentRef.LevelObjects[levelSelectorRef.currentLevel].gameObject.SetActive(true);
         LivesReload();
-        //Debug.Log("Curr Lvl# aftr" + levelsParentRef.LevelObjects[levelSelectorRef.currentLevel]);
     }
 
     public void LivesRemoves(int life)
     {
-        for (int i = 0; i < uiControllerRef.LivesParent.transform.childCount; i++)
+        // Check if 'life' is within valid range
+        if (life < 0 || life >= uiControllerRef.LivesParent.transform.childCount)
         {
-            if(uiControllerRef.LivesParent != null)
-            uiControllerRef.LivesParent.transform.GetChild(life).gameObject.SetActive(false);
+            Debug.LogError("Life parameter out of bounds: " + life);
+            return;
         }
-        Debug.Log("You Miss");
 
+        // Disable the UI element corresponding to the current life
+        Transform lifeTransform = uiControllerRef.LivesParent.transform.GetChild(life);
+        if (lifeTransform != null)
+        {
+            lifeTransform.gameObject.SetActive(false);
+        }
+
+        Debug.Log("Life removed at index: " + life);
     }
 
-     public void LivesReload()
+    public void LivesReload()
     {
         for (int i = 0; i < uiControllerRef.LivesParent.transform.childCount; i++)
         {
-            if(!uiControllerRef.LivesParent.transform.GetChild(i).gameObject.activeSelf)
-            uiControllerRef.LivesParent.transform.GetChild(i).gameObject.SetActive(true);
+            if (!uiControllerRef.LivesParent.transform.GetChild(i).gameObject.activeSelf)
+                uiControllerRef.LivesParent.transform.GetChild(i).gameObject.SetActive(true);
         }
-
         Debug.Log("LivesReload");
     }
 
-    public void DisableAllLevel() 
+    public void DisableAllLevel()
     {
         for (int i = 0; i < levelsParentRef.transform.childCount; i++)
         {
-            if (levelsParentRef.LevelObjects[i].gameObject.activeSelf) 
+            if (levelsParentRef.LevelObjects[i].gameObject.activeSelf)
             {
                 levelsParentRef.LevelObjects[i].gameObject.SetActive(false);
             }
         }
     }
 
-    public void CloseGame() 
+    public void CloseGame()
     {
         Application.Quit();
         Debug.Log("Close Game");
     }
     #endregion
-
 }

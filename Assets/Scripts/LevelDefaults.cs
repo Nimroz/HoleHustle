@@ -7,23 +7,35 @@ public class LevelDefaults : MonoBehaviour
 
     public GameObject Player;
     public GameObject Spawner;
+    public Transform WinPointPos;
+
     public int Lives;
     public bool isGameOver;
     public bool isWin;
     public string playerPath = "Prefab/Player";
 
-    //private void Start()
-    //{
-    //    ResetBypass();
-    //}
+    [SerializeField]private WinPoint winPoint;
+
+    private void Reset()
+    {
+        winPoint = FindObjectOfType<WinPoint>(true);
+        Spawner = GetComponentInChildren<Spawner>(true).gameObject;
+        WinPointPos = GetComponentInChildren<WinPointPosRef>(true).transform;
+        Player = Resources.Load<GameObject>(playerPath);
+        Lives = 2;
+        isGameOver = false;
+        isWin = false;
+        Player.transform.position = Spawner.transform.position;
+    }
 
     public void ResetBypass()
     {
         Spawner = GetComponentInChildren<Spawner>(true).gameObject;
+        WinPointPos = GetComponentInChildren<WinPointPosRef>(true).transform;
         Player = Resources.Load<GameObject>(playerPath);
         if (Player != null )
         {
-            Player = Instantiate(Player, Spawner.transform.position, transform.rotation , this.transform);
+            Player = Instantiate(Player, Spawner.transform.position, Player.transform.rotation , this.transform);
             Debug.Log("Prefab loaded and instantiated successfully.");
         }
         else
@@ -34,6 +46,7 @@ public class LevelDefaults : MonoBehaviour
         isGameOver = false;
         isWin = false;
         Player.transform.position = Spawner.transform.position;
+        winPoint.transform.position = WinPointPos.position;
     }
 
  

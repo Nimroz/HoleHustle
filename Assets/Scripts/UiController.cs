@@ -6,6 +6,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
+using TMPro;
 /// <summary>
 /// Date: 16-Jul-2024
 /// Author: Nimroz Baloch
@@ -33,13 +35,24 @@ public class UiController : MonoBehaviour
     public Button NextLevelBtn;
     public Button CloseGame;
 
+    public TMP_Text levelText;
+
     #endregion
 
     #region UnityMethods
+    private void Awake()
+    {
+      //  SceneManager.LoadSceneAsync("GamePlay", LoadSceneMode.Additive);
+
+    }
+
+
     private void Start()
     {
         gameManagerRef = FindObjectOfType<GameManager>();
-       AddListenerToButtons();
+        // Find all buttons in the scene
+
+        AddListenerToButtons();
     }
     #endregion
 
@@ -86,6 +99,10 @@ public class UiController : MonoBehaviour
         if (sender == HomeBtn.gameObject)
         {
              gameManagerRef.DisableAllLevel();
+            if (levelText.gameObject.activeSelf)
+            {
+                levelText.gameObject.SetActive(false);
+            }
             CloseGame.gameObject.SetActive(true);
             if (ShopPanel.activeSelf == true)
             {
@@ -115,6 +132,10 @@ public class UiController : MonoBehaviour
                 gameManagerRef.DisableAllLevel();
                 GameOverPanel.SetActive(false);
                 HomePanel.SetActive(true);
+                if (levelText.gameObject.activeSelf)
+                {
+                    levelText.gameObject.SetActive(false);
+                }
             }
         }
         if (sender == HomeBtnOnWin.gameObject)
@@ -125,9 +146,15 @@ public class UiController : MonoBehaviour
                 gameManagerRef.DisableAllLevel();
                 WinPanel.SetActive(false);
                 HomePanel.SetActive(true);
+                if (levelText.gameObject.activeSelf)
+                {
+                    levelText.gameObject.SetActive(false);
+                }
             }
         }
     }
     #endregion
+
+
 
 }

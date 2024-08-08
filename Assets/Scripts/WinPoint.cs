@@ -9,7 +9,7 @@ using UnityEngine;
 public class WinPoint : MonoBehaviour
 {
     #region Variables
-    public ParticleSystem ParticleSystem;
+    public List<ParticleSystem> particleSystems;
     public UiController uiController;
     public GameManager  GameManager;
     #endregion
@@ -17,10 +17,8 @@ public class WinPoint : MonoBehaviour
     #region UnityMethods
     private void Start()
     {
-        GameManager = FindAnyObjectByType<GameManager>();
-        uiController = FindAnyObjectByType<UiController>();
+        GameManager = FindObjectOfType<GameManager>();
         uiController = GameManager.uiControllerRef;
-        ParticleSystem = FindAnyObjectByType<ParticleSystem>();
 
         if (GameManager != null)
         {
@@ -41,8 +39,26 @@ public class WinPoint : MonoBehaviour
     #region CustomMethods
     public void WinMethod() 
     {
-        ParticleSystem.Play();
+        if (particleSystems.Count > 0)
+        {
+            int randomIndex = Random.Range(0, particleSystems.Count);
+            ParticleSystem selectedParticleSystem = particleSystems[randomIndex];
+            selectedParticleSystem.gameObject.SetActive(true);
+            selectedParticleSystem.Play();
+            StartCoroutine(DisableParticleSystem());
+        }
+       // ParticleSystem.Play();
         GameManager.OnWin?.Invoke();
+    }
+
+    IEnumerator DisableParticleSystem() 
+    {
+        yield return new WaitForSeconds(.9f);
+        foreach (var item in particleSystems)
+        {
+            if(item.gameObject.activeSelf)
+            item.gameObject.SetActive(false);
+        }
     }
     #endregion
 
