@@ -2508,7 +2508,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -2.36, y: 0.26, z: -5.81}
-  m_LocalScale: {x: 0.8, y: 0.70000005, z: 0.70000005}
+  m_LocalScale: {x: 0.85, y: 0.7437501, z: 0.7437501}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8144128245407059292}
@@ -2585,7 +2585,6 @@ MonoBehaviour:
   uiController: {fileID: 0}
   GameManager: {fileID: 0}
   LevelDefaults: {fileID: 0}
-  obstacle: {fileID: 0}
 --- !u!54 &2223013281968968213
 Rigidbody:
   m_ObjectHideFlags: 0

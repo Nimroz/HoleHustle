@@ -52,7 +52,7 @@ public class PlayerMovements : MonoBehaviour
 
         if (!LevelDefaults.isGameOver)
         {
-            if (Input.GetMouseButtonDown(0) && !isDragging && IsMouseOverPlayer())
+            if (Input.GetMouseButtonDown(0) && !isDragging && IsMouseOverPlayer() && stillTime == 0f)
             {
                 DragStart();
             }

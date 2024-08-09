@@ -27,7 +27,16 @@ public class LevelDefaults : MonoBehaviour
         isWin = false;
         Player.transform.position = Spawner.transform.position;
     }
+    private void OnEnable()
+    {
+        SoundMnager.soundManager.PlayStartLevelSound();
+    }
 
+    private void OnDisable()
+    {
+        if(Player != null)
+        Destroy(Player);
+    }
     public void ResetBypass()
     {
         Spawner = GetComponentInChildren<Spawner>(true).gameObject;

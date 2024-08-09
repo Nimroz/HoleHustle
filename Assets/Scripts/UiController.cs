@@ -42,8 +42,7 @@ public class UiController : MonoBehaviour
     #region UnityMethods
     private void Awake()
     {
-      //  SceneManager.LoadSceneAsync("GamePlay", LoadSceneMode.Additive);
-
+      SceneManager.LoadSceneAsync("GamePlay", LoadSceneMode.Additive);
     }
 
 

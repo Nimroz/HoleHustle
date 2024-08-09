@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         uiControllerRef.WinPanel.SetActive(true);
+        SoundMnager.soundManager.PlayWinSound();
         Destroy(LevelDefaultsRef.Player);
     }
 
@@ -67,6 +68,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1.1f);
         uiControllerRef.GameOverPanel.SetActive(true);
+        SoundMnager.soundManager.PlayLoseSound();
         Destroy(LevelDefaultsRef.Player);
     }
 

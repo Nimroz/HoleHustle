@@ -27,6 +27,7 @@ public class Obstacle : MonoBehaviour
             isHit = true; // Prevent multiple hits on this obstacle
             levelDefaults.Lives -= 1; // Deduct life here
             gameManager.OnMiss?.Invoke(levelDefaults.Lives);
+            SoundMnager.soundManager.PlayHitSound();
             Debug.Log("Obstacle Hit");
 
             if (levelDefaults.Lives < 0)
