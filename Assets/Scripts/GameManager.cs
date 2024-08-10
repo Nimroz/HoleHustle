@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -53,6 +54,8 @@ public class GameManager : MonoBehaviour
         uiControllerRef.WinPanel.SetActive(true);
         SoundMnager.soundManager.PlayWinSound();
         Destroy(LevelDefaultsRef.Player);
+        levelSelectorRef.LevelButtons[levelSelectorRef.currentLevel + 1].interactable = true;
+        levelSelectorRef.LevelButtons[levelSelectorRef.currentLevel + 1].transform.GetChild(1).gameObject.SetActive(false);
     }
 
     public void OnGameIsOver()

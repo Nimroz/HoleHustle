@@ -2578,8 +2578,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f25602ca8c6ad094097f7ab84c141e73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DragLimit: 0.7
-  ForceToAdd: 60
+  DragLimit: 0.8
+  ForceToAdd: 70
   lineRenderer: {fileID: 4958849511419884093}
   PlayerBody: {fileID: 2223013281968968213}
   uiController: {fileID: 0}
